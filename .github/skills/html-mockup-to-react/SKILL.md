@@ -25,7 +25,7 @@ Use this skill when the request includes phrases such as:
 
 1. Locate and read the complete mockup file before editing. Inspect linked stylesheets, scripts, images, fonts, and asset paths that affect its rendering.
 2. Inspect the existing project structure, `package.json`, TypeScript configuration, routing setup, styling conventions, and test scripts.
-3. Find project-specific component guidance under `/references`, `./references`, or the repository's documented conventions. Read the relevant guidance before designing components. If no reference directory exists, follow the existing codebase patterns and standard React accessibility practices.
+3. Find project-specific component and styling guidance under `/references`, `./references`, or the repository's documented conventions. Read the relevant guidance before designing components, including the Tailwind CSS v4.3+ reference when present. If no reference directory exists, use Tailwind CSS v4.3+ with standard React accessibility practices unless the project already uses an established styling system.
 4. Confirm the target output path and entry point. Preserve existing application architecture rather than introducing a parallel framework or styling system.
 
 ### 2. Decompose the mockup
@@ -34,7 +34,7 @@ Use this skill when the request includes phrases such as:
 2. Make a region a component when it has a distinct responsibility, repeated structure, independent state, a meaningful semantic boundary, or a likely reuse case. Keep purely presentational fragments local when extraction would add indirection without reuse.
 3. Use semantic HTML and accessible names, labels, landmarks, keyboard behavior, focus states, and appropriate button/link elements. Do not replace working navigation links with inert click handlers.
 4. Keep components focused. Pass data and callbacks through typed props; do not hide page-specific data in reusable components.
-5. Preserve the mockup's responsive layout and visual intent using the project's established styling approach. Reuse existing design tokens and components where available.
+5. Preserve the mockup's responsive layout and visual intent with Tailwind CSS v4.3+ utility classes. Use the project's existing design tokens and components where available; do not introduce a second styling system into an established project.
 
 ### 3. Define data and interaction boundaries
 
@@ -48,9 +48,13 @@ Use this skill when the request includes phrases such as:
 
 1. Use React 19 or newer and TypeScript 7 or newer where the project supports those versions. Check installed versions and package-manager constraints before changing dependencies.
 2. If the repository is already a React project, extend its existing setup. If it is not, determine whether the user expects a complete project scaffold; do not silently replace unrelated project files.
-3. Use strict, explicit TypeScript types for props, mock records, event handlers, route data, and component state. Avoid `any` unless an external boundary makes it unavoidable and the exception is documented locally.
-4. Keep components testable and avoid unnecessary global state, duplicated markup, or premature abstractions.
-5. Keep edits limited to the mockup feature and required supporting files. Do not refactor unrelated code.
+3. Use Tailwind CSS v4.3+ for styling. Prefer utility classes for layout, sizing, typography, colors, states, and responsive behavior over custom CSS.
+4. Define repeated colors, fonts, spacing, shadows, and breakpoints as theme variables or existing project design tokens. Avoid repeating arbitrary values.
+5. Order utility classes consistently: layout, sizing, typography, colors, then interaction states.
+6. Use mobile-first responsive utilities, semantic HTML, and visible focus states. Do not use styling classes as a substitute for accessible markup.
+7. Use strict, explicit TypeScript types for props, mock records, event handlers, route data, and component state. Avoid `any` unless an external boundary makes it unavoidable and the exception is documented locally.
+8. Keep components testable and avoid unnecessary global state, duplicated markup, or premature abstractions.
+9. Keep edits limited to the mockup feature and required supporting files. Do not refactor unrelated code.
 
 ### 5. Validate progressively
 
