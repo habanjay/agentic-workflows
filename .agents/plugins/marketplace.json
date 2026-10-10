@@ -1,0 +1,16 @@
+{
+  "name": "agentic-workflows",
+  "owner": {
+    "name": "agentic-workflows maintainers"
+  },
+  "interface": {
+    "displayName": "Agentic Workflows"
+  },
+  "plugins": [
+    {
+      "name": "scaffold-engine",
+      "source": "./plugins/scaffold-engine",
+      "description": "Skills and agents for repeatable project scaffolding workflows."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "version": "0.1",
+  "pathFilters": [
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "skills/**",
+    "com.github.copilot/**"
+  ]
+}

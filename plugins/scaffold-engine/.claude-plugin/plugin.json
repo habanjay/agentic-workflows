@@ -1,0 +1,6 @@
+{
+  "name": "scaffold-engine",
+  "version": "0.1.0",
+  "description": "Skills and agents for repeatable project scaffolding workflows.",
+  "skills": ["./skills/"]
+}

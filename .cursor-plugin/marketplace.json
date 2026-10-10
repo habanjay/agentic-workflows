@@ -1,0 +1,16 @@
+{
+  "name": "agentic-workflows",
+  "owner": {
+    "name": "agentic-workflows maintainers"
+  },
+  "metadata": {
+    "description": "Reusable skills and agents for agentic development workflows."
+  },
+  "plugins": [
+    {
+      "name": "scaffold-engine",
+      "source": "./plugins/scaffold-engine",
+      "description": "Skills and agents for repeatable project scaffolding workflows."
+    }
+  ]
+}
