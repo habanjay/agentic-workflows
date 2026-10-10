@@ -1,0 +1,6 @@
+{
+  "name": "test-helper",
+  "version": "0.1.0",
+  "description": "A focused agent and skill for designing, writing, and validating unit tests.",
+  "skills": ["./skills/"]
+}

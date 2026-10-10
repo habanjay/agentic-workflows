@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "test-helper",
+  "version": "0.1.0",
+  "description": "A focused agent and skill for designing, writing, and validating unit tests."
+}

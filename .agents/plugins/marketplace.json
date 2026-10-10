@@ -1,0 +1,21 @@
+{
+  "name": "agentic-workflows",
+  "owner": {
+    "name": "agentic-workflows maintainers"
+  },
+  "interface": {
+    "displayName": "Agentic Workflows"
+  },
+  "plugins": [
+    {
+      "name": "scaffold-engine",
+      "source": "./plugins/scaffold-engine",
+      "description": "Skills and agents for repeatable project scaffolding workflows."
+    },
+    {
+      "name": "test-helper",
+      "source": "./plugins/test-helper",
+      "description": "A focused agent and skill for designing, writing, and validating unit tests."
+    }
+  ]
+}
