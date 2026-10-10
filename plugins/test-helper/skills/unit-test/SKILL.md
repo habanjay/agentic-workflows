@@ -1,15 +1,27 @@
 ---
 name: unit-test
-description: Use when creating, improving, or troubleshooting unit tests for application code. Inspect the existing test framework and conventions, cover meaningful behavior and edge cases, and run the narrowest relevant tests.
+description: "Use when creating, improving, or troubleshooting unit tests for application code. Inspect the existing test framework and conventions, cover meaningful behavior and edge cases, and run the narrowest relevant tests."
 ---
 
 # Unit Test
 
-Write tests that make behavior clear, detect realistic regressions, and remain consistent with the repository's existing test suite.
+## Purpose
+
+Write unit tests that make behavior clear, detect realistic regressions, and remain consistent with the repository's existing test suite.
 
 ## Invocation Notice
 
 At the start of the first user-facing update where this skill is applied, say: `I'm using unit-test`.
+
+## When to use
+
+- Creating or improving unit tests for application code.
+- Troubleshooting unit-test failures or coverage gaps.
+
+## When not to use
+
+- Requests only to run an existing test suite without creating, improving, or troubleshooting tests.
+- Requests primarily about implementing application behavior rather than testing it.
 
 ## Workflow
 
@@ -20,6 +32,20 @@ At the start of the first user-facing update where this skill is applied, say: `
 5. Make test-only changes by default. Change production code only when the user requests implementation work or a minimal fix is necessary to make the intended behavior testable; explain that choice.
 6. Run the narrowest relevant test command. If it fails, distinguish a test assertion failure from build, restore, environment, or unrelated suite failures before proposing changes.
 
-## Completion
+## Decision rules
 
-Summarize the behavior covered, files changed, and the exact validation result. State clearly when tests were not run or could not complete.
+- Prefer observable behavior over private implementation details.
+- Keep tests focused, deterministic, and consistent with existing test conventions.
+- Make test-only changes by default; explain any production-code change.
+- Avoid redundant cases and unrelated cleanup.
+
+## Examples
+
+**Input:** Add unit tests for a parser that accepts valid input and rejects malformed input.
+
+**Expected result:** Inspect the parser and the existing test conventions, add focused tests for valid and meaningful invalid cases, then run the narrowest relevant test command.
+
+## Verification
+
+- Run the narrowest relevant test command and report its exact result.
+- Summarize behavior covered and files changed. State clearly when tests were not run or could not complete.

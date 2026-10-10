@@ -1,15 +1,27 @@
 ---
 name: scaffold
-description: Use when creating a new project, application, API, or infrastructure scaffold. Inspect the repository first, identify the requested stack and scope, then route API work to scaffold-api and Terraform work to scaffold-terraform.
+description: "Use when creating a new project, application, API, or infrastructure scaffold. Inspect the repository first, identify the requested stack and scope, then route API work to scaffold-api and Terraform work to scaffold-terraform."
 ---
 
 # Scaffold
+
+## Purpose
 
 Create the smallest useful project structure that meets the request and fits the repository's existing conventions.
 
 ## Invocation Notice
 
 At the start of the first user-facing update where this skill is applied, say: `I'm using scaffold`. If you route into a sub-skill, announce that sub-skill by its exact name before following its workflow.
+
+## When to use
+
+- Creating a new project, application, API, or infrastructure scaffold.
+- Adding a new service or infrastructure foundation when the request requires a scaffold.
+
+## When not to use
+
+- Making a focused change to an existing project that does not require a new scaffold.
+- Requests to create API or Terraform scaffolds without following the corresponding sub-skill.
 
 ## Workflow
 
@@ -23,6 +35,25 @@ At the start of the first user-facing update where this skill is applied, say: `
 5. Create or update the requested files, preserving existing user content and changes.
 6. Run the narrowest available validation, such as a template listing, formatter, project parse, build, or test. Report anything that could not be validated.
 
-## Completion
+## Decision rules
 
-Summarize the created structure, key choices, and validation result. Do not claim a scaffold builds or runs unless the corresponding check succeeded.
+- Inspect the repository before choosing tools or generating files; preserve existing content and changes.
+- Route API scaffolds to [scaffold-api](../scaffold-api/SKILL.md) and Terraform scaffolds to [scaffold-terraform](../scaffold-terraform/SKILL.md).
+- Ask only about unresolved choices that materially affect the generated structure.
+- Avoid adding frameworks, files, or features outside the requested scope.
+
+## Examples
+
+**Input:** Create a new API project in this repository.
+
+**Expected result:** Inspect repository conventions, announce and follow [scaffold-api](../scaffold-api/SKILL.md), generate the requested API scaffold, then report the selected framework and validation result.
+
+## Verification
+
+- Run the narrowest available validation, such as a template listing, formatter, project parse, build, or test.
+- Summarize the created structure, key choices, and validation result. Do not claim a scaffold builds or runs unless the corresponding check succeeded.
+
+## Resources
+
+- [scaffold-api](../scaffold-api/SKILL.md) — API project and service scaffolds.
+- [scaffold-terraform](../scaffold-terraform/SKILL.md) — Terraform and infrastructure-as-code scaffolds.
