@@ -18,6 +18,46 @@ repository but are not currently listed in the plugin marketplaces.
 
 ## Installation
 
+### Install agents and skills in VS Code or Visual Studio
+
+The installer copies the repository's agents and skills into the workspace
+locations that GitHub Copilot discovers in both VS Code and Visual Studio.
+The target must be an existing project or solution directory.
+
+Requirements:
+
+- **VS Code:** GitHub Copilot Chat with agent mode enabled.
+- **Visual Studio Professional:** Visual Studio 2026 version 18.4 or later
+  for custom agents; version 18.5 or later is required for agent skills.
+  Sign in to GitHub Copilot and use agent mode.
+
+Clone this repository, then run the installer in PowerShell:
+
+```powershell
+git clone https://github.com/habanjay/agentic-workflows.git
+& ".\agentic-workflows\scripts\install.ps1" -WorkspacePath "C:\path\to\your\project"
+```
+
+Run these commands from the directory where you want to clone the repository.
+The installer adds `.github/agents/` and `.github/skills/` to the target
+workspace. For example, it installs `test-agent.agent.md` to
+`<your-project>\.github\agents\test-agent.agent.md` and its `unit-test` skill
+to `<your-project>\.github\skills\unit-test\`.
+
+Open the **target project** (the path passed to `-WorkspacePath`) in VS Code or
+Visual Studio, then reload the window if it was already open. The installed
+agent should appear in Copilot Chat's agent picker; Copilot loads relevant
+skills when appropriate. In VS Code, `/skills` lists discovered skills.
+
+If an agent or skill with the same name already exists in the target workspace,
+the installer stops and lists the conflicts. Review them, then rerun with
+`-Force` to update those matching files. The script does not remove other
+customizations or files.
+
+The marketplace plugin installation below is a separate workflow. To install
+the GitHub Copilot workspace custom agents in VS Code or Visual Studio, use
+the PowerShell installer above.
+
 ### 🚀 Plugins - Copilot CLI / Claude Code
 
 1. Launch Copilot CLI or Claude Code.
