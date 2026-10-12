@@ -62,10 +62,10 @@ Reload VS Code if it was already open. The installed agents should appear in
 Copilot Chat's agent picker; Copilot loads relevant skills when appropriate.
 In VS Code, `/skills` lists discovered skills.
 
-If an agent or skill with the same name already exists in the target location,
-the installer stops and lists the conflicts. Review them, then rerun with
-`-Force` to update those matching files. The script does not remove other
-customizations or files.
+User-level installs automatically replace matching bundled agents and skills
+so rerunning the installer updates them. Workspace installs stop if matching
+files already exist; review the listed conflicts, then rerun with `-Force` to
+replace them. The installer does not remove other customizations or files.
 
 The marketplace plugin installation below is a separate workflow. The
 PowerShell installer is for the GitHub Copilot custom agents and skills in

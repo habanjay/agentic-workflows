@@ -61,6 +61,8 @@ else {
     $destinationDescription = "$userProfile and $(Join-Path $HOME '.github')"
 }
 
+$overwriteExisting = $Force -or ($PSCmdlet.ParameterSetName -eq 'User')
+
 $pluginDirectories = @(Get-ChildItem -LiteralPath (Join-Path $repositoryRoot 'plugins') -Directory)
 
 $agents = @(
@@ -104,7 +106,7 @@ $conflicts = @(
     }
 )
 
-if ($conflicts.Count -gt 0 -and -not $Force) {
+if ($conflicts.Count -gt 0 -and -not $overwriteExisting) {
     $conflictList = $conflicts -join [Environment]::NewLine
     throw "Existing customizations would be overwritten. Review them, then rerun with -Force to update these items:`n$conflictList"
 }
@@ -117,7 +119,7 @@ foreach ($agentDestination in $agentDestinations) {
         $target = Join-Path $agentDestination $agent.Name
         if ($PSCmdlet.ShouldProcess($target, "Install agent '$($agent.BaseName)'")) {
             New-Item -ItemType Directory -Path $agentDestination -Force | Out-Null
-            Copy-Item -LiteralPath $agent.FullName -Destination $target -Force:$Force
+            Copy-Item -LiteralPath $agent.FullName -Destination $target -Force:$overwriteExisting
             $installedAgentCount++
         }
     }
@@ -128,7 +130,7 @@ foreach ($skill in $skills) {
     if ($PSCmdlet.ShouldProcess($target, "Install skill '$($skill.Name)'")) {
         New-Item -ItemType Directory -Path $target -Force | Out-Null
         Get-ChildItem -LiteralPath $skill.FullName -Force |
-            Copy-Item -Destination $target -Recurse -Force:$Force
+            Copy-Item -Destination $target -Recurse -Force:$overwriteExisting
         $installedSkillCount++
     }
 }
