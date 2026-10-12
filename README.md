@@ -49,7 +49,8 @@ this in PowerShell:
 
 If you cloned to a different destination, replace the path accordingly. The
 installer places agents in `%USERPROFILE%\.copilot\agents\` and skills in
-`%USERPROFILE%\.copilot\skills\`.
+`%USERPROFILE%\.copilot\skills\`. It also copies user-level agents to
+`%USERPROFILE%\.github\agents\` for Visual Studio Professional.
 
 To install into a single workspace instead, run
 `scripts\install.ps1 -WorkspacePath "C:\path\to\your\project"` from the

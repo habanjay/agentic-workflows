@@ -47,15 +47,18 @@ if ($PSCmdlet.ParameterSetName -eq 'Workspace') {
     }
 
     $workspace = $workspaceItem.FullName
-    $agentDestination = Join-Path $workspace '.github\agents'
+    $agentDestinations = @((Join-Path $workspace '.github\agents'))
     $skillDestination = Join-Path $workspace '.github\skills'
     $destinationDescription = "$workspace\.github"
 }
 else {
     $userProfile = Join-Path $HOME '.copilot'
-    $agentDestination = Join-Path $userProfile 'agents'
+    $agentDestinations = @(
+        (Join-Path $userProfile 'agents')
+        (Join-Path $HOME '.github\agents')
+    )
     $skillDestination = Join-Path $userProfile 'skills'
-    $destinationDescription = $userProfile
+    $destinationDescription = "$userProfile and $(Join-Path $HOME '.github')"
 }
 
 $pluginDirectories = @(Get-ChildItem -LiteralPath (Join-Path $repositoryRoot 'plugins') -Directory)
@@ -85,10 +88,12 @@ if ($agents.Count -eq 0 -or $skills.Count -eq 0) {
 }
 
 $conflicts = @(
-    foreach ($agent in $agents) {
-        $target = Join-Path $agentDestination $agent.Name
-        if (Test-Path -LiteralPath $target) {
-            $target
+    foreach ($agentDestination in $agentDestinations) {
+        foreach ($agent in $agents) {
+            $target = Join-Path $agentDestination $agent.Name
+            if (Test-Path -LiteralPath $target) {
+                $target
+            }
         }
     }
     foreach ($skill in $skills) {
@@ -107,12 +112,14 @@ if ($conflicts.Count -gt 0 -and -not $Force) {
 $installedAgentCount = 0
 $installedSkillCount = 0
 
-foreach ($agent in $agents) {
-    $target = Join-Path $agentDestination $agent.Name
-    if ($PSCmdlet.ShouldProcess($target, "Install agent '$($agent.BaseName)'")) {
-        New-Item -ItemType Directory -Path $agentDestination -Force | Out-Null
-        Copy-Item -LiteralPath $agent.FullName -Destination $target -Force:$Force
-        $installedAgentCount++
+foreach ($agentDestination in $agentDestinations) {
+    foreach ($agent in $agents) {
+        $target = Join-Path $agentDestination $agent.Name
+        if ($PSCmdlet.ShouldProcess($target, "Install agent '$($agent.BaseName)'")) {
+            New-Item -ItemType Directory -Path $agentDestination -Force | Out-Null
+            Copy-Item -LiteralPath $agent.FullName -Destination $target -Force:$Force
+            $installedAgentCount++
+        }
     }
 }
 
@@ -130,5 +137,5 @@ if ($installedAgentCount -eq 0 -and $installedSkillCount -eq 0) {
     Write-Host "No files were installed into $destinationDescription."
 }
 else {
-    Write-Host "Installed $installedAgentCount agent(s) and $installedSkillCount skill(s) into $destinationDescription"
+    Write-Host "Installed $installedAgentCount agent file(s) and $installedSkillCount skill(s) into $destinationDescription"
 }
