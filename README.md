@@ -98,7 +98,8 @@ Add the marketplace to your `settings.json`:
 ```
 
 Then type `/plugins` in Copilot Chat or use the `@agentPlugins` filter in
-Extensions to browse and install plugins.
+Extensions to browse and install plugins. Installing `test-helper` makes
+`test-agent` available in the VS Code agent picker.
 
 ### Cursor
 
