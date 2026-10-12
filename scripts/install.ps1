@@ -1,19 +1,34 @@
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 param(
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $true, ParameterSetName = 'Workspace')]
     [string]$WorkspacePath,
+
+    [Parameter(Mandatory = $true, ParameterSetName = 'User')]
+    [switch]$User,
 
     [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
 
-$workspaceItem = Get-Item -LiteralPath $WorkspacePath
-if (-not $workspaceItem.PSIsContainer) {
-    throw "WorkspacePath must be an existing directory: $WorkspacePath"
+if ($PSCmdlet.ParameterSetName -eq 'Workspace') {
+    $workspaceItem = Get-Item -LiteralPath $WorkspacePath
+    if (-not $workspaceItem.PSIsContainer) {
+        throw "WorkspacePath must be an existing directory: $WorkspacePath"
+    }
+
+    $workspace = $workspaceItem.FullName
+    $agentDestination = Join-Path $workspace '.github\agents'
+    $skillDestination = Join-Path $workspace '.github\skills'
+    $destinationDescription = "$workspace\.github"
+}
+else {
+    $userProfile = Join-Path $HOME '.copilot'
+    $agentDestination = Join-Path $userProfile 'agents'
+    $skillDestination = Join-Path $userProfile 'skills'
+    $destinationDescription = $userProfile
 }
 
-$workspace = $workspaceItem.FullName
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $pluginDirectories = @(Get-ChildItem -LiteralPath (Join-Path $repositoryRoot 'plugins') -Directory)
 
@@ -41,8 +56,6 @@ if ($agents.Count -eq 0 -or $skills.Count -eq 0) {
     throw 'The repository must contain at least one agent and one skill to install.'
 }
 
-$agentDestination = Join-Path $workspace '.github\agents'
-$skillDestination = Join-Path $workspace '.github\skills'
 $conflicts = @(
     foreach ($agent in $agents) {
         $target = Join-Path $agentDestination $agent.Name
@@ -89,5 +102,5 @@ if ($installedAgentCount -eq 0 -and $installedSkillCount -eq 0) {
     Write-Host "No files were installed into $workspace."
 }
 else {
-    Write-Host "Installed $installedAgentCount agent(s) and $installedSkillCount skill(s) into $workspace\.github"
+    Write-Host "Installed $installedAgentCount agent(s) and $installedSkillCount skill(s) into $destinationDescription"
 }

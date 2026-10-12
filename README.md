@@ -58,6 +58,18 @@ The marketplace plugin installation below is a separate workflow. To install
 the GitHub Copilot workspace custom agents in VS Code or Visual Studio, use
 the PowerShell installer above.
 
+To make the agents and skills available across projects in your personal
+Copilot profile instead, run:
+
+```powershell
+& ".\agentic-workflows\scripts\install.ps1" -User
+```
+
+This installs agents to `%USERPROFILE%\.copilot\agents\` and skills to
+`%USERPROFILE%\.copilot\skills\`. Existing files are preserved unless you
+rerun with `-Force`; the same conflict checks apply to workspace and user
+installs.
+
 ### 🚀 Plugins - Copilot CLI / Claude Code
 
 1. Launch Copilot CLI or Claude Code.
