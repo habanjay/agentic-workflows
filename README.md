@@ -20,9 +20,9 @@ repository but are not currently listed in the plugin marketplaces.
 
 ### Install agents and skills in VS Code or Visual Studio
 
-The installer copies the repository's agents and skills into the workspace
-locations that GitHub Copilot discovers in both VS Code and Visual Studio.
-The target must be an existing project or solution directory.
+By default, the installer copies the repository's agents and skills into your
+user-level Copilot folders. To install into a single workspace instead, pass
+the path to an existing project or solution directory with `-WorkspacePath`.
 
 Requirements:
 
@@ -30,45 +30,45 @@ Requirements:
 - **Visual Studio Professional:** Visual Studio 2026 version 18.4 or later
   for custom agents; version 18.5 or later is required for agent skills.
   Sign in to GitHub Copilot and use agent mode.
+- **Git:** Installed and available in PowerShell's `PATH` to clone the repository.
 
-Clone this repository, then run the installer in PowerShell:
+Run this Command Prompt command to clone the repository:
 
-```powershell
-git clone https://github.com/habanjay/agentic-workflows.git
-& ".\agentic-workflows\scripts\install.ps1" -WorkspacePath "C:\path\to\your\project"
+```bat
+git clone https://github.com/habanjay/agentic-workflows.git "%USERPROFILE%\source\repos\agentic-workflows"
 ```
 
-Run these commands from the directory where you want to clone the repository.
-The installer adds `.github/agents/` and `.github/skills/` to the target
-workspace. For example, it installs `test-agent.agent.md` to
-`<your-project>\.github\agents\test-agent.agent.md` and its `unit-test` skill
-to `<your-project>\.github\skills\unit-test\`.
+The default checkout is `%USERPROFILE%\source\repos\agentic-workflows`; change
+the destination path to use a different directory. This command only clones
+the repository. To install its agents and skills to your user profile, run
+this in PowerShell:
 
-Open the **target project** (the path passed to `-WorkspacePath`) in VS Code or
-Visual Studio, then reload the window if it was already open. The installed
-agent should appear in Copilot Chat's agent picker; Copilot loads relevant
-skills when appropriate. In VS Code, `/skills` lists discovered skills.
+```powershell
+& "$env:USERPROFILE\source\repos\agentic-workflows\scripts\install.ps1" -User
+```
 
-If an agent or skill with the same name already exists in the target workspace,
+If you cloned to a different destination, replace the path accordingly. The
+installer places agents in `%USERPROFILE%\.copilot\agents\` and skills in
+`%USERPROFILE%\.copilot\skills\`.
+
+To install into a single workspace instead, run
+`scripts\install.ps1 -WorkspacePath "C:\path\to\your\project"` from the
+repository directory. This adds `.github\agents\` and `.github\skills\` to
+that workspace. Running `install.ps1` without `-WorkspacePath` installs to the
+user profile by default.
+
+Reload VS Code if it was already open. The installed agents should appear in
+Copilot Chat's agent picker; Copilot loads relevant skills when appropriate.
+In VS Code, `/skills` lists discovered skills.
+
+If an agent or skill with the same name already exists in the target location,
 the installer stops and lists the conflicts. Review them, then rerun with
 `-Force` to update those matching files. The script does not remove other
 customizations or files.
 
-The marketplace plugin installation below is a separate workflow. To install
-the GitHub Copilot workspace custom agents in VS Code or Visual Studio, use
-the PowerShell installer above.
-
-To make the agents and skills available across projects in your personal
-Copilot profile instead, run:
-
-```powershell
-& ".\agentic-workflows\scripts\install.ps1" -User
-```
-
-This installs agents to `%USERPROFILE%\.copilot\agents\` and skills to
-`%USERPROFILE%\.copilot\skills\`. Existing files are preserved unless you
-rerun with `-Force`; the same conflict checks apply to workspace and user
-installs.
+The marketplace plugin installation below is a separate workflow. The
+PowerShell installer is for the GitHub Copilot custom agents and skills in
+VS Code or Visual Studio.
 
 ### 🚀 Plugins - Copilot CLI / Claude Code
 

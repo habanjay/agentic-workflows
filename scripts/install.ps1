@@ -1,15 +1,44 @@
-[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium', DefaultParameterSetName = 'User')]
 param(
     [Parameter(Mandatory = $true, ParameterSetName = 'Workspace')]
     [string]$WorkspacePath,
 
-    [Parameter(Mandatory = $true, ParameterSetName = 'User')]
+    [Parameter(ParameterSetName = 'User')]
     [switch]$User,
 
     [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
+
+$repositoryRoot = if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+    Split-Path -Parent $PSScriptRoot
+}
+
+if (-not $repositoryRoot -or -not (Test-Path -LiteralPath (Join-Path $repositoryRoot 'plugins') -PathType Container)) {
+    $repositoryDirectory = Join-Path $env:USERPROFILE 'source\repos'
+    $repositoryPath = Join-Path $repositoryDirectory 'agentic-workflows'
+    $bootstrapInstaller = Join-Path $repositoryPath 'scripts\install.ps1'
+
+    if (-not (Test-Path -LiteralPath $bootstrapInstaller -PathType Leaf)) {
+        if (Test-Path -LiteralPath $repositoryPath) {
+            throw "The destination already exists but is not an agentic-workflows checkout: $repositoryPath"
+        }
+
+        if (-not $PSCmdlet.ShouldProcess($repositoryPath, 'Clone the agentic-workflows repository')) {
+            return
+        }
+
+        New-Item -ItemType Directory -Path $repositoryDirectory -Force | Out-Null
+        git clone https://github.com/habanjay/agentic-workflows.git $repositoryPath
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Cloning agentic-workflows failed.'
+        }
+    }
+
+    & $bootstrapInstaller @PSBoundParameters
+    return
+}
 
 if ($PSCmdlet.ParameterSetName -eq 'Workspace') {
     $workspaceItem = Get-Item -LiteralPath $WorkspacePath
@@ -29,7 +58,6 @@ else {
     $destinationDescription = $userProfile
 }
 
-$repositoryRoot = Split-Path -Parent $PSScriptRoot
 $pluginDirectories = @(Get-ChildItem -LiteralPath (Join-Path $repositoryRoot 'plugins') -Directory)
 
 $agents = @(
@@ -99,7 +127,7 @@ foreach ($skill in $skills) {
 }
 
 if ($installedAgentCount -eq 0 -and $installedSkillCount -eq 0) {
-    Write-Host "No files were installed into $workspace."
+    Write-Host "No files were installed into $destinationDescription."
 }
 else {
     Write-Host "Installed $installedAgentCount agent(s) and $installedSkillCount skill(s) into $destinationDescription"
